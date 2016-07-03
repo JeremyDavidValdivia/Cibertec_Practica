@@ -8,8 +8,6 @@ namespace WebDeveloper.Controllers
         public ActionResult Index()
         {            
             return View();
-        }
-
-       
+        } 
     }
 }

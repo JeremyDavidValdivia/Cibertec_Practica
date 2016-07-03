@@ -16,12 +16,13 @@ namespace WebDeveloper.DataAccess
             Database.SetInitializer(new WebDeveloperInitializer());
         }
 
-        public DbSet<Products> Products { get; set; }
+        public DbSet<Products> lProducts { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             /* Elimina Datos convencionales de EntityFramework */
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
+
     }
 }

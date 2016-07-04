@@ -16,7 +16,15 @@ namespace WebDeveloper.DataAccess
             Database.SetInitializer(new WebDeveloperInitializer());
         }
 
-        public DbSet<Products> lProducts { get; set; }
+        public DbSet<Products>  lProducts { get; set; }
+
+        public DbSet<Customers> lCustomers { get; set; }
+
+        public DbSet<Categories> lCategories { get; set; }
+
+        public DbSet<Employees> lEmployees { get; set; }
+
+        public DbSet<Orders> lOrders { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

@@ -1,73 +1,124 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Entity;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using WebDeveloper.ActionFilters;
 using WebDeveloper.DataAccess;
 using WebDeveloper.Model;
 
 namespace WebDeveloper.Controllers
 {
+    [LogActionFilter]
+    [RoutePrefix("Product")]
     public class ProductController : Controller
     {
-        private ProductData _product = new ProductData();
+        private WebContextDb db = new WebContextDb();
 
         // GET: Product
+        [Route]
         public ActionResult Index()
         {
-            var product = new ProductData();
-            return View(_product.GetList());
+            var lProducts = db.lProducts.Include(p => p.Categories);
+            return View(lProducts.ToList());
         }
 
+        // GET: Product/Create
         public ActionResult Create()
         {
-            return View(new Products());
-        }
-
-        [HttpPost]
-        public ActionResult Create(Products product)
-        {
-            /* Validación del lado del servidor - las llamadas a Requered */
-            if (ModelState.IsValid)
-            {
-                _product.Add(product);
-                return RedirectToAction("Index");
-            }
+            ViewBag.CategoryID = new SelectList(db.lCategories, "CategoryID", "CategoryName");
             return View();
         }
 
-        public ActionResult Edit(int Id)
-        {
-            return View(_product.GetProductById(Id));
-        }
-
+        // POST: Product/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Edit(Products product)
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "ProductID,ProductName,SupplierID,CategoryID,QuantityPerUnit,UnitPrice,UnitsInStock,UnitsOnOrder,ReorderLevel,Discontinued")] Products products)
         {
-            /* Validación del lado del servidor - las llamadas a Requered */
             if (ModelState.IsValid)
             {
-                _product.Update(product);
+                db.lProducts.Add(products);
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View();
+
+            ViewBag.CategoryID = new SelectList(db.lCategories, "CategoryID", "CategoryName", products.CategoryID);
+            return View(products);
         }
 
-        public ActionResult Delete(int Id)
+        // GET: Product/Edit/5
+        [Route("Edit/{id:int}")]
+        public ActionResult Edit(int? id)
         {
-            var product = _product.GetProductById(Id);
-            if (product == null)
-                return RedirectToAction("Index");
-            else
-                return View(product);
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Products products = db.lProducts.Find(id);
+            if (products == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.CategoryID = new SelectList(db.lCategories, "CategoryID", "CategoryName", products.CategoryID);
+            return View(products);
         }
 
+        // POST: Product/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public ActionResult Delete(Products product)
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit([Bind(Include = "ProductID,ProductName,SupplierID,CategoryID,QuantityPerUnit,UnitPrice,UnitsInStock,UnitsOnOrder,ReorderLevel,Discontinued")] Products products)
         {
-            if (_product.Delete(product) > 0)
+            if (ModelState.IsValid)
+            {
+                db.Entry(products).State = EntityState.Modified;
+                db.SaveChanges();
                 return RedirectToAction("Index");
-            return View(product);
+            }
+            ViewBag.CategoryID = new SelectList(db.lCategories, "CategoryID", "CategoryName", products.CategoryID);
+            return View(products);
+        }
+
+        // GET: Product/Delete/5
+        [Route("Delete/{id:int}")]
+        public ActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Products products = db.lProducts.Find(id);
+            if (products == null)
+            {
+                return HttpNotFound();
+            }
+            return View(products);
+        }
+
+        // POST: Product/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            Products products = db.lProducts.Find(id);
+            db.lProducts.Remove(products);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

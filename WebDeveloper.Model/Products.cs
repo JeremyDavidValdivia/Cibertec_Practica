@@ -12,13 +12,14 @@ namespace WebDeveloper.Model
 
         [Display(Name = "Product Name : ")]
         [Required(ErrorMessage = "Product Name is required")]
-        [StringLength(40)]
+        [StringLength(100)]
         public string ProductName { get; set; }
 
         [Display(Name = "Supplier ID : ")]
         public int? SupplierID { get; set; }
 
         [Display(Name = "Category ID : ")]
+        [Required(ErrorMessage = "CategoryID is required")]
         public int? CategoryID { get; set; }
 
         [Display(Name = "Quantity Per Unit : ")]

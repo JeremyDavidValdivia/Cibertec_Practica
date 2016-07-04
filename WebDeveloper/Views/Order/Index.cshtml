@@ -1,0 +1,84 @@
+﻿@model IEnumerable<WebDeveloper.Model.Orders>
+
+@using WebDeveloper.Helpers
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Orders</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Customers.CustomerID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Employees.EmployeeID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrderDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RequiredDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ShippedDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ShipVia)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Freight)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ShipName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ShipAddress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ShipCity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ShipRegion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ShipPostalCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ShipCountry)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        @Html.DisplayStringExtension("td", item.Customers.CompanyName)
+        @Html.DisplayStringExtension("td", item.Employees.LastName + ", " + item.Employees.FirstName)
+        @Html.DisplayDateOrNullExtension("td", item.OrderDate)
+        @Html.DisplayDateOrNullExtension("td", item.RequiredDate)
+        @Html.DisplayDateOrNullExtension("td", item.ShippedDate)
+        <td>
+            @Html.DisplayFor(modelItem => item.ShipVia)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Freight)
+        </td>
+        @Html.DisplayStringExtension("td", item.ShipName)
+        @Html.DisplayStringExtension("td", item.ShipAddress)
+        @Html.DisplayStringExtension("td", item.ShipCity)
+        @Html.DisplayStringExtension("td", item.ShipRegion)
+        @Html.DisplayStringExtension("td", item.ShipPostalCode)
+        @Html.DisplayStringExtension("td", item.ShipCountry)
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.OrderID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.OrderID })
+        </td>
+    </tr>
+}
+
+</table>

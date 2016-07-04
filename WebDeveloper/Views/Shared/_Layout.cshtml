@@ -22,6 +22,11 @@
                 <nav class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                        <li>@Html.ActionLink("Categories", "Index", "Category")</li>
+                        <li>@Html.ActionLink("Customers", "Index", "Customer")</li>
+                        <li>@Html.ActionLink("Employees", "Index", "Employee")</li>
+                        <li>@Html.ActionLink("Products", "Index", "Product")</li>
+                        <li>@Html.ActionLink("Orders", "Index", "Order")</li>
                     </ul>
                 </nav>
             </div>
@@ -31,9 +36,9 @@
     <section class="container body-content">
         @RenderBody()
     </section>
-    @*<footer>
+    <footer>
         &copy; @DateTime.Now.Year - Todos los derechos reservados al autor.
-    </footer>*@
+    </footer>
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>
